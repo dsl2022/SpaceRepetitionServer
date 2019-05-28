@@ -31,5 +31,15 @@ The keyword await makes JavaScript wait until that promise settles and returns i
 
 
 
+
+
 How does the GET /api/language endpoint decide which language to respond with? (Hint: Does it relate to the user that made the request?)
-In the UserService.populateUserWords method, what is db.transaction?
+
+### In the UserService.populateUserWords method, what is db.transaction?
+
+
+### What is SERIAL in the create migration files? (Hint)
+It's a a method of generating artificial primary keys. 
+
+### What is setval in the seed file? (Hint)
+it set the next value according the max value of current id. 
