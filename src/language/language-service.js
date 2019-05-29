@@ -1,3 +1,5 @@
+const ll = require('../linkedlist/linkedlist');
+
 const LanguageService = {
   getUsersLanguage(db, user_id) {
     return db
@@ -28,6 +30,13 @@ const LanguageService = {
       )
       .where({ language_id })
   },
+  getLanguageLinkedList(words){
+    const list = new ll();
+    words.forEach(word=>{
+      list.insertLast(word);
+    })
+    return list;
+  }
 }
 
 module.exports = LanguageService

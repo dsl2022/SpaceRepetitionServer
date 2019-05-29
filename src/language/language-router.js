@@ -32,7 +32,6 @@ languageRouter
         req.app.get('db'),
         req.language.id,
       )
-
       res.json({
         language: req.language,
         words,
@@ -45,13 +44,43 @@ languageRouter
 
 languageRouter
   .get('/head', async (req, res, next) => {
-    // implement me
-    res.send('implement me!')
+    const words = await 
+    LanguageService.getLanguageWords(
+      req.app.get('db'),
+      req.language.id,
+    )
+    res.send({
+      "nextWord": words[req.language.head-1].original,
+      "wordIncorrectCount": words[req.language.head-1].incorrect_count,
+      "wordCorrectCount": words[req.language.head-1].correct_count,
+      "totalScore": req.language.total_score
+    })
   })
 
 languageRouter
   .post('/guess', async (req, res, next) => {
     // implement me
+    const userId = req.user.id;
+    const guess = req.body;
+    const words = await 
+    LanguageService.getLanguageWords(
+      req.app.get('db'),
+      req.language.id,
+    )
+    const ll = await 
+    LanguageService.getLanguageLinkedList(
+      words
+    )
+    console.log(req.body);
+    console.log(ll.head.data.translation)
+    if (req.body === undefined){
+      return res.status(400).json({error:`Missing 'guess' in request body`})
+    }
+    const guess = req.guess;
+    
+
+
+
     res.send('implement me!')
   })
 
