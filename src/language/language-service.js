@@ -29,14 +29,43 @@ const LanguageService = {
         'incorrect_count',
       )
       .where({ language_id })
+      .orderBy('id')
   },
-  getLanguageLinkedList(words){
+  getLanguageLinkedList(words,head){
     const list = new ll();
-    words.forEach(word=>{
-      list.insertLast(word);
-    })
+    let currNode = words[head-1]
+    while (currNode.next !== null){
+      list.insertLast(currNode);
+      currNode = words[currNode.next - 1];
+    }
+    list.insertLast(currNode);
     return list;
+  },
+  async updateLanguageWords(db,listOfWords){
+    // linked list of words
+    let currNode = listOfWords.head;
+    let nextId = null
+    while(currNode !== null){
+      await LanguageService.updateLanguageWord(db,currNode.data);
+      currNode = currNode.next;
+    }
+    return;
+  },
+  updateLanguageWord(db,word){
+    return db
+      .from('word')
+      .select('*')
+      .where({'id':word.id})
+      .update(word)
+  },
+  updateLanguage(db,id,total_score,head){
+    return db
+      .from('language')
+      .select('*')
+      .where({id})
+      .update({total_score,head})
   }
+
 }
 
 module.exports = LanguageService
