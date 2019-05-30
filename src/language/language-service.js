@@ -56,19 +56,14 @@ const LanguageService = {
       .from('word')
       .select('*')
       .where({'id':word.id})
-      .update({
-        next:word.next,
-        memory_value: word.memory_value,
-        correct_count: word.correct_count,
-        incorrect_count: word.incorrect_count
-      })
+      .update(word)
   },
-  updateLanguage(db,language_id,total_score,head){
+  updateLanguage(db,id,total_score,head){
     return db
       .from('language')
       .select('*')
-      .where({'id':language_id})
-      .update({total_score:total_score,head:head})
+      .where({id})
+      .update({total_score,head})
   }
 
 }
