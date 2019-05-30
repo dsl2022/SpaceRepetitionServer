@@ -76,7 +76,7 @@ languageRouter
     if (req.body === undefined){
       return res.status(400).json({error:`Missing 'guess' in request body`})
     }
-    const guess = req.guess;
+   
     
 
 
