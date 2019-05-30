@@ -69,21 +69,20 @@ languageRouter
       req.app.get('db'),
       req.language.id,
     )
-    // console.log('>>>>>words:',words)
     const ll = await 
     LanguageService.getLanguageLinkedList(
       words,
       req.language.head
     )
-    console.log(req.language);
+    // keeping track of current word
     const word = ll.head.data;
     const guess = req.body.guess;
-    const correct = guess === word.translation; 
-    let total = new Number(req.language.total_score);
     const answer = ll.head.data.translation;
+    let total = new Number(req.language.total_score);
     const nextWord = ll.head.next.data.original;
     
-  
+    // checking to see if guess was correct
+    const correct = guess === word.translation; 
     if (correct){
       // increase correct count for word
       ll.head.data.correct_count++;
@@ -93,12 +92,10 @@ languageRouter
       // increase incorrect count for word
       ll.head.data.incorrect_count++;
     }
+
     // setM
-    ll.display();
     ll.setM(correct);
-    ll.display();
-    const languageHead = ll.head.data.id;
-    console.log('new head:',languageHead);
+
     // persist updated words and language in db
     await LanguageService.updateLanguageWords(
       req.app.get('db'),
@@ -107,22 +104,8 @@ languageRouter
     await LanguageService.updateLanguage(
       req.app.get('db'),req.language.id,
       total,
-      languageHead
+      ll.head.data.id
     );
-    
-    // checking to make sure the data persisted to the db
-    const words2 = await 
-    LanguageService.getLanguageWords(
-      req.app.get('db'),
-      req.language.id,
-    );
-    
-    const ll2 = await 
-    LanguageService.getLanguageLinkedList(
-      words2,
-      languageHead
-    );
-    ll2.display();
 
     // send response
     res.send({
@@ -133,23 +116,6 @@ languageRouter
       "answer":answer,
       "isCorrect":correct
     })
-    // correct :{
-    //   "nextWord": "test-next-word-from-correct-guess",
-    //   "wordCorrectCount": 111,
-    //   "wordIncorrectCount": 222,
-    //   "totalScore": 333,
-    //   "answer": "test-answer-from-correct-guess",
-    //   "isCorrect": true
-    // }
-    // incorrect: {
-    //   "nextWord": "test-next-word-from-incorrect-guess",
-    //   "wordCorrectCount": 888,
-    //   "wordIncorrectCount": 111,
-    //   "totalScore": 999,
-    //   "answer": "test-answer-from-incorrect-guess",
-    //   "isCorrect": false
-    // }
-
   })
 
 module.exports = languageRouter
