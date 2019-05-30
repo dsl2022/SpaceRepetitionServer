@@ -64,8 +64,6 @@ languageRouter
     if (!req.body.guess){
       return res.status(400).json({error:`Missing 'guess' in request body`})
     }
-    // console.log('>>>>>lang:',req.language);
-    const userId = req.user.id;
     const words = await 
     LanguageService.getLanguageWords(
       req.app.get('db'),
@@ -77,38 +75,64 @@ languageRouter
       words,
       req.language.head
     )
-    // console.log('>>>>ll:',ll);
+    console.log(req.language);
     const word = ll.head.data;
     const guess = req.body.guess;
     const correct = guess === word.translation; 
-    let total_score = new Number(req.language.total_score);
-    let result = {
-      "nextWord": ll.head.next.data.original,
-      "wordCorrectCount":ll.head.data.correct_count,
-      "wordIncorrectCount": ll.head.data.incorrect_count,
-      "totalScore":total_score,
-      "answer":ll.head.data.translation,
-      "isCorrect":correct
-    };
+    let total = new Number(req.language.total_score);
+    const answer = ll.head.data.translation;
+    const nextWord = ll.head.next.data.original;
+    
+  
     if (correct){
       // increase correct count for word
-      word.correct_count++;
+      ll.head.data.correct_count++;
       // update total score
-      total_score += 1;
+      total += 1;
     }else{
       // increase incorrect count for word
-      word.incorrect_count++;
+      ll.head.data.incorrect_count++;
     }
     // setM
+    ll.display();
     ll.setM(correct);
-    console.log('><><><><>new ll:',ll);
+    ll.display();
+    const languageHead = ll.head.data.id;
+    console.log('new head:',languageHead);
     // persist updated words and language in db
-    await LanguageService.updateLanguageWords(req.app.get('db'),ll);
-    await LanguageService.updateLanguage(req.app.get('db'),req.language.id,total_score)
-
+    await LanguageService.updateLanguageWords(
+      req.app.get('db'),
+      ll
+    );
+    await LanguageService.updateLanguage(
+      req.app.get('db'),req.language.id,
+      total,
+      languageHead
+    );
+    
+    // checking to make sure the data persisted to the db
+    const words2 = await 
+    LanguageService.getLanguageWords(
+      req.app.get('db'),
+      req.language.id,
+    );
+    
+    const ll2 = await 
+    LanguageService.getLanguageLinkedList(
+      words2,
+      languageHead
+    );
+    ll2.display();
 
     // send response
-    res.send(result)
+    res.send({
+      "nextWord": nextWord,
+      "wordCorrectCount":ll.head.data.correct_count,
+      "wordIncorrectCount": ll.head.data.incorrect_count,
+      "totalScore":total,
+      "answer":answer,
+      "isCorrect":correct
+    })
     // correct :{
     //   "nextWord": "test-next-word-from-correct-guess",
     //   "wordCorrectCount": 111,
@@ -126,7 +150,6 @@ languageRouter
     //   "isCorrect": false
     // }
 
-    res.send('implement me!')
   })
 
 module.exports = languageRouter

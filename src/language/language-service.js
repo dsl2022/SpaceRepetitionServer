@@ -29,6 +29,7 @@ const LanguageService = {
         'incorrect_count',
       )
       .where({ language_id })
+      .orderBy('id')
   },
   getLanguageLinkedList(words,head){
     const list = new ll();
@@ -40,12 +41,12 @@ const LanguageService = {
     list.insertLast(currNode);
     return list;
   },
-  updateLanguageWords(db,listOfWords){
+  async updateLanguageWords(db,listOfWords){
     // linked list of words
     let currNode = listOfWords.head;
-    console.log(currNode);
+    let nextId = null
     while(currNode !== null){
-      LanguageService.updateLanguageWord(db,currNode.data);
+      await LanguageService.updateLanguageWord(db,currNode.data);
       currNode = currNode.next;
     }
     return;
@@ -53,15 +54,21 @@ const LanguageService = {
   updateLanguageWord(db,word){
     return db
       .from('word')
-      .where('id',word.id)
-      .update(word)
+      .select('*')
+      .where({'id':word.id})
+      .update({
+        next:word.next,
+        memory_value: word.memory_value,
+        correct_count: word.correct_count,
+        incorrect_count: word.incorrect_count
+      })
   },
-  updateLanguage(db,language_id,total_score){
+  updateLanguage(db,language_id,total_score,head){
     return db
       .from('language')
       .select('*')
-      .where('id',language_id)
-      .update({total_score})
+      .where({'id':language_id})
+      .update({total_score:total_score,head:head})
   }
 
 }

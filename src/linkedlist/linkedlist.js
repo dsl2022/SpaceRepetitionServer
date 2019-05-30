@@ -69,12 +69,17 @@ class LinkedList {
     }
     if (nthPosition === 0) {
       this.insertFirst(itemToInsert);
-    } else {
+    } else if(nthPosition === this._length()){
+      this.insertLast(itemToInsert);
+    }
+    else {
       // Find the node which we want to insert after
       const node = this._findNthElement(nthPosition - 1);
       const newNode = new _Node(itemToInsert, null);
       newNode.next = node.next;
+      newNode.data.next = node.next.data.id;
       node.next = newNode;
+      node.data.next = newNode.data.id;
     }
   }
 
@@ -87,6 +92,16 @@ class LinkedList {
       node = node.next;
     }
     return node;
+  }
+
+  _length(){
+    let currNode = this.head;
+    let count = 0;
+    while (currNode !== null){
+      count++;
+      currNode = currNode.next;
+    }
+    return count;
   }
 
   remove(item) {
@@ -144,15 +159,25 @@ class LinkedList {
   setM(wasCorrect) {
     let currentQuestion = this.head;
     if(wasCorrect === true){
-      currentQuestion.data.mValue = currentQuestion.data.mValue * 2;
+      currentQuestion.data.memory_value = currentQuestion.data.memory_value * 2;
     }
     else{
-      currentQuestion.data.mValue = 1;
+      currentQuestion.data.memory_value = 1;
     }
     this.removeHead();
 
-    return this.insertAt(currentQuestion.data.mValue, currentQuestion.data);
+    return this.insertAt(currentQuestion.data.memory_value, currentQuestion.data);
 
+  }
+
+  display(){
+    let display='';
+    let currNode = this.head;
+    while (currNode !== null){
+      display+=`${currNode.data.id} ->`;
+      currNode = currNode.next;
+    }
+    console.log(display);
   }
 }
 
