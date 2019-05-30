@@ -30,13 +30,40 @@ const LanguageService = {
       )
       .where({ language_id })
   },
-  getLanguageLinkedList(words){
+  getLanguageLinkedList(words,head){
     const list = new ll();
-    words.forEach(word=>{
-      list.insertLast(word);
-    })
+    let currNode = words[head-1]
+    while (currNode.next !== null){
+      list.insertLast(currNode);
+      currNode = words[currNode.next - 1];
+    }
+    list.insertLast(currNode);
     return list;
+  },
+  updateLanguageWords(db,listOfWords){
+    // linked list of words
+    let currNode = listOfWords.head;
+    console.log(currNode);
+    while(currNode !== null){
+      LanguageService.updateLanguageWord(db,currNode.data);
+      currNode = currNode.next;
+    }
+    return;
+  },
+  updateLanguageWord(db,word){
+    return db
+      .from('word')
+      .where('id',word.id)
+      .update(word)
+  },
+  updateLanguage(db,language_id,total_score){
+    return db
+      .from('language')
+      .select('*')
+      .where('id',language_id)
+      .update({total_score})
   }
+
 }
 
 module.exports = LanguageService

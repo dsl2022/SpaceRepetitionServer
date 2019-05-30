@@ -103,7 +103,7 @@ class LinkedList {
     let currNode = this.head;
     //keep track of previous
     let previousNode = this.head;
-    while ((currNode !== null) && (currNode.value !== item)) {
+    while ((currNode !== null) && (currNode.data !== item)) {
       //save the previous node
       previousNode = currNode;
       currNode = currNode.next;
@@ -122,7 +122,7 @@ class LinkedList {
     if (!this.head) {
       return null;
     }
-    while (currNode.value !== item) {
+    while (currNode.data !== item) {
       //return null if end of the list
       // and the item is not on the list
       if (currNode.next === null) {
