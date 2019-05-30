@@ -74,28 +74,12 @@ languageRouter
       words,
       req.language.head
     )
-<<<<<<< HEAD
-    console.log(req.body);
-    console.log(ll.head.data.translation)
-    if (req.body === undefined){
-      return res.status(400).json({error:`Missing 'guess' in request body`})
-    }
-   
-||||||| merged common ancestors
-    console.log(req.body);
-    console.log(ll.head.data.translation)
-    if (req.body === undefined){
-      return res.status(400).json({error:`Missing 'guess' in request body`})
-    }
-    const guess = req.guess;
-=======
     // keeping track of current word
     const word = ll.head.data;
     const guess = req.body.guess;
     const answer = ll.head.data.translation;
     let total = new Number(req.language.total_score);
     const nextWord = ll.head.next.data.original;
->>>>>>> 040633d77f699815f53cf5f44fdca50bdf417e4e
     
     // checking to see if guess was correct
     const correct = guess === word.translation; 
