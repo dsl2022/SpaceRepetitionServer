@@ -1,5 +1,28 @@
 # Spaced repetition API!
 
+## Sumary
+
+An Express server API used for [Space Repetition Project](https://github.com/JizongL/spaceRepetitionClient)
+
+Deployed [here] (https://space-repetition-server.herokuapp.com/)
+
+## API Documentation
+
+### POST /api/login
+User login. Requires a body with parameters _user_name_ and _password_.
+
+### POST /api/users
+Create a user. Requires a body with parameters _user_name_ and _password_.
+
+### GET /api/language
+Returns a language's words.
+
+### GET /api/language/head
+Returns the next question.
+
+### POST /api/language/guess
+Submit a guess. Requires a body with paramaeters _guess_.
+
 ## Local dev setup
 
 If using user `dunder-mifflin`:
