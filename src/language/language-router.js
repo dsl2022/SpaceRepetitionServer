@@ -52,11 +52,13 @@ languageRouter
         req.language.id,
       )
      
-      console.log(words.length,'test head-1',req.language,'test head')
+      //console.log(words,'test head-1',req.language,'test head')
+      word = words.filter(word=>{return word.next === req.language.head+1})
+      console.log(word.original,'test word')
       res.send({
-        "nextWord": words[req.language.head-1].original,
-        "wordIncorrectCount": words[req.language.head-1].incorrect_count,
-        "wordCorrectCount": words[req.language.head-1].correct_count,
+        "nextWord": word[0].original,
+        "wordIncorrectCount": word[0].incorrect_count,
+        "wordCorrectCount": word[0].correct_count,
         "totalScore": req.language.total_score
       })
 
