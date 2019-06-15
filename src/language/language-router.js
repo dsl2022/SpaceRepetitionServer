@@ -52,7 +52,7 @@ languageRouter
         req.language.id,
       )
      
-      console.log(words[0].original,'test head-1',req.language.head,'test head')
+      console.log(words.length,'test head-1',req.language,'test head')
       res.send({
         "nextWord": words[req.language.head-1].original,
         "wordIncorrectCount": words[req.language.head-1].incorrect_count,
