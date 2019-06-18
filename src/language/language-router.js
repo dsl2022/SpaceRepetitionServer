@@ -51,15 +51,17 @@ languageRouter
         req.app.get('db'),
         req.language.id,
       )
-      words = words.filter(word=>{
-        words.id === req.language.head;
+      word = words.filter(word=>{
+        return word.id === req.language.head;
       })
      
-      console.log(words[0].original,'test head-1',req.language.head,'test head')
+      //console.log(words,'test head-1',req.language,'test head')
+      // word = words.filter(word=>{return word.next === req.language.head+1})
+      console.log(word.original,'test word')
       res.send({
-        "nextWord": words[0].original,
-        "wordIncorrectCount": words[0].incorrect_count,
-        "wordCorrectCount": words[0].correct_count,
+        "nextWord": word[0].original,
+        "wordIncorrectCount": word[0].incorrect_count,
+        "wordCorrectCount": word[0].correct_count,
         "totalScore": req.language.total_score
       })
 
