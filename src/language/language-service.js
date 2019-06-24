@@ -31,21 +31,12 @@ const LanguageService = {
       .where({ language_id })
       .orderBy('id')
   },
-  async getLanguageLinkedList(words,head){
+  getLanguageLinkedList(words,head){
     const list = new ll();
-    let i =0;
-    while (words[i].id !==head){
-      i++;
-    }
-    let currNode = words[i];
+    let currNode = words[head-1]
     while (currNode.next !== null){
       list.insertLast(currNode);
-      i = 0;
-      while (words[i].id !==currNode.next){
-        i++;
-      }
-      currNode = words[i];
-      i++;
+      currNode = words[currNode.next - 1];
     }
     list.insertLast(currNode);
     return list;
