@@ -57,7 +57,7 @@ languageRouter
      
       //console.log(words,'test head-1',req.language,'test head')
       // word = words.filter(word=>{return word.next === req.language.head+1})
-      console.log(word.original,'test word')
+      console.log(word[0].translation,'test word')
       res.send({
         "nextWord": word[0].original,
         "wordIncorrectCount": word[0].incorrect_count,
@@ -87,6 +87,8 @@ languageRouter
       words,
       req.language.head
     )
+    console.log('linked list:')
+    ll.display();
     // keeping track of current word
     const word = ll.head.data;
     const guess = req.body.guess;
